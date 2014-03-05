@@ -19,6 +19,7 @@
       center: false,
       getWidthFrom: ''
     },
+    lastScrollTop = 0,
     $window = $(window),
     $document = $(document),
     sticked = [],
@@ -30,10 +31,16 @@
         extra = (scrollTop > dwh) ? dwh - scrollTop : 0;
 
       for (var i = 0; i < sticked.length; i++) {
-        var s = sticked[i],
-          elementTop = s.stickyWrapper.offset().top,
-          etse = elementTop - s.topSpacing - extra;
-
+        var s = sticked[i];
+        var margin = parseInt(s.stickyElement.css('margin-top'));
+        if (lastScrollTop < scrollTop) {
+          var elementTop = s.stickyWrapper.offset().top;
+        }
+        else{
+          var elementTop = s.stickyWrapper.offset().top + margin;
+        }
+        var etse = elementTop - s.topSpacing - extra;
+        lastScrollTop = scrollTop;
         if (scrollTop <= etse) {
           if (s.currentTop !== null) {
             s.stickyElement
@@ -47,9 +54,12 @@
           var newTop = documentHeight - s.stickyElement.outerHeight()
             - s.topSpacing - s.bottomSpacing - scrollTop - extra;
           if (newTop < 0) {
-            newTop = newTop + s.topSpacing;
+            newTop = s.topSpacing -  margin;
           } else {
-            newTop = s.topSpacing;
+            newTop = s.topSpacing -  margin;
+          }
+          if (newTop <= 0 ) {
+            newTop = margin;
           }
           if (s.currentTop != newTop) {
             s.stickyElement
@@ -71,6 +81,7 @@
     },
     methods = {
       init: function(options) {
+        lastScrollTop = $window.scrollTop();
         var o = $.extend(defaults, options);
         return this.each(function() {
           var stickyElement = $(this);
