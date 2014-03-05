@@ -53,14 +53,12 @@
         else {
           var newTop = documentHeight - s.stickyElement.outerHeight()
             - s.topSpacing - s.bottomSpacing - scrollTop - extra;
-          if (newTop < 0) {
+          if (newTop <= 0) {
             newTop = s.topSpacing -  margin;
           } else {
             newTop = s.topSpacing -  margin;
           }
-          if (newTop <= 0 ) {
-            newTop = margin;
-          }
+          console.log(newTop);
           if (s.currentTop != newTop) {
             s.stickyElement
               .css('position', 'fixed')
