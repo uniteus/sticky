@@ -58,7 +58,6 @@
           } else {
             newTop = s.topSpacing -  margin;
           }
-          console.log(newTop);
           if (s.currentTop != newTop) {
             s.stickyElement
               .css('position', 'fixed')
